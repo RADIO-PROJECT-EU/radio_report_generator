@@ -3,6 +3,7 @@ import os
 import rospy
 import rospkg
 import smtplib
+import numpy as np
 from datetime import datetime
 from std_msgs.msg import Int32
 from kobuki_msgs.msg import Sound
@@ -77,7 +78,22 @@ def generateReport(msg):
         body += "4 meters walk file attached.\n"
         body += "---\n\n\n"
         for f in files:
-            with open(path+f, 'rb') as myfile:
+            content = []
+            filtered = []
+            title = []
+            content = np.genfromtxt(path+f, delimiter=',')
+            content = content[1:-1]
+            filtered = [x for x in content if x[2] > 2]
+            filtered.sort(key=lambda x: x[2])
+            filtered = filtered[len(filtered)/2]
+            newf = 'official_log_walkf_' + datetime.today().strftime("%d-%m-%Y")+'.csv'
+            with open(path+newf,'w+') as nf:
+                nf.write("Human ID, Distance, Time for 4 meters\n")
+                nf.write(str(filtered[0])+',')
+                nf.write(str(filtered[1])+',')
+                nf.write(str(filtered[2])+'\n')
+            
+            with open(path+newf, 'rb') as myfile:
                 part = MIMEApplication(myfile.read(), Name=f)
                 part['Content-Disposition'] = 'attachment; filename="%s"' % f
                 msg.attach(part)
@@ -93,10 +109,21 @@ def generateReport(msg):
             files_to_remove.append(path+i)
 
     if found_file:
-        body += "Sitting-Standing file attached."
+        body += "Sitting-Standing file attached.\n"
         body += "---\n\n\n"
         for f in files:
-            with open(path+f, 'rb') as myfile:
+            content = []
+            filtered = []
+            title = []
+            content = np.genfromtxt(path+f, delimiter=',')
+            content = content[1:-1]
+            content.sort()
+            content = content[len(content)/2]
+            newf = 'official_log_walkf_' + datetime.today().strftime("%d-%m-%Y")+'.csv'
+            with open(path+newf,'w+') as nf:
+                nf.write("Sitting-Standing time\n")
+                nf.write(str(content)+"\n")
+            with open(path+newf, 'rb') as myfile:
                 part = MIMEApplication(myfile.read(), Name=f)
                 part['Content-Disposition'] = 'attachment; filename="%s"' % f
                 msg.attach(part)
