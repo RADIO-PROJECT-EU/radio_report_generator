@@ -15,140 +15,144 @@ sound_pub = None
 
 def generateReport(msg):
     global sound_pub
-    files_to_remove = []
+    files_to_move = []
     fromaddr = "roboskelncsr@gmail.com"
     toaddr = ["gstavrinos@iit.demokritos.gr", "gs.juggle@gmail.com"]
     subject = "Medical Report as of "+datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     msg = MIMEMultipart()
     msg['From'] = fromaddr
     msg['To'] = ", ".join(toaddr)
-    msg['BCC'] = "stavrinosgeo@gmail.com"
+    msg['Bcc'] = "stavrinosgeo@gmail.com"
     msg['Subject'] = subject
 
     body = subject+"\n\n\n"
 
     rospack = rospkg.RosPack()
 
-    path = rospack.get_path('motion_analysis_wrapper')+'/logs/'
-    files = []
-    found_file = False
-    for i in os.listdir(path):
-        if os.path.isfile(os.path.join(path,i)) and 'official_log_bed_'+datetime.today().strftime("%d-%m-%Y") in i:
-            found_file = True
-            files.append(i)
-            files_to_remove.append(path+i)
+    radio_logs = '~/radio_logs'
+    rmax = 1
+    if not os.path.exists(os.path.expanduser(radio_logs)):
+        os.makedirs(os.path.expanduser(radio_logs))
+    else:
+        for i in os.listdir(radio_logs):
+            if 'report' in i:
+                i = i.replace('report','')
+                i = i.replace('.csv','')
+                if int(i) > rmax:
+                    rmax = int(i)
+    with open(radio_logs+'/'+'report'+str(rmax)+'.csv','w+') as report_file:
+        path = rospack.get_path('motion_analysis_wrapper')+'/logs/'
+        files = []
+        found_file = False
+        for i in os.listdir(path):
+            for d in range(2, -1, -1):
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_bed_'+(datetime.date.today()-datetime.timedelta(d)).strftime("%d-%m-%Y") in i:
+                    found_file = True
+                    files.append(i)
+                    files_to_move.append(path+i)
 
-    if found_file:
-        body += "Lying-Standing file attached.\n"
-        body += "---\n\n\n"
-        for f in files:
-            with open(path+f, 'rb') as myfile:
-                part = MIMEApplication(myfile.read(), Name=f)
-                part['Content-Disposition'] = 'attachment; filename="%s"' % f
-                msg.attach(part)
-    files = []
-    found_file = False
-
-    for i in os.listdir(path):
-        if os.path.isfile(os.path.join(path,i)) and 'official_log_pill_'+datetime.today().strftime("%d-%m-%Y") in i:
-            found_file = True
-            files.append(i)
-            files_to_remove.append(path+i)
-
-    if found_file:
-        body += "Pill intake file attached.\n"
-        body += "---\n\n\n"
-        for f in files:
-            with open(path+f, 'rb') as myfile:
-                part = MIMEApplication(myfile.read(), Name=f)
-                part['Content-Disposition'] = 'attachment; filename="%s"' % f
-                msg.attach(part)
-    files = []
-    found_file = False
-
-
-    path = rospack.get_path('hpr_wrapper')+'/logs/'
-    for i in os.listdir(path):
-        if os.path.isfile(os.path.join(path,i)) and 'official_log_walk_'+datetime.today().strftime("%d-%m-%Y") in i:
-            found_file = True
-            files.append(i)
-            files_to_remove.append(path+i)
-
-    if found_file:
-        body += "4 meters walk file attached.\n"
-        body += "---\n\n\n"
-        for f in files:
-            content = []
-            filtered = []
-            title = []
-            content = np.genfromtxt(path+f, delimiter=',')
-            content = content[1:-1]
-            filtered = [x for x in content if x[2] > 2]
-            filtered.sort(key=lambda x: x[2])
-            filtered = filtered[len(filtered)/2]
-            newf = 'official_log_walkf_' + datetime.today().strftime("%d-%m-%Y")+'.csv'
-            with open(path+newf,'w+') as nf:
-                nf.write("Human ID, Distance, Time for 4 meters\n")
-                nf.write(str(filtered[0])+',')
-                nf.write(str(filtered[1])+',')
-                nf.write(str(filtered[2])+'\n')
-            
-            with open(path+newf, 'rb') as myfile:
-                part = MIMEApplication(myfile.read(), Name=f)
-                part['Content-Disposition'] = 'attachment; filename="%s"' % f
-                msg.attach(part)
-
-    files = []
-    found_file = False
-
-    path = rospack.get_path('ros_visual_wrapper')+'/logs/'
-    for i in os.listdir(path):
-        if os.path.isfile(os.path.join(path,i)) and 'official_log_chair_'+datetime.today().strftime("%d-%m-%Y") in i:
-            found_file = True
-            files.append(i)
-            files_to_remove.append(path+i)
-
-    if found_file:
-        body += "Sitting-Standing file attached.\n"
-        body += "---\n\n\n"
-        for f in files:
-            content = []
-            filtered = []
-            title = []
-            content = np.genfromtxt(path+f, delimiter=',')
-            content = content[1:-1]
-            content.sort()
-            content = content[len(content)/2]
-            newf = 'official_log_walkf_' + datetime.today().strftime("%d-%m-%Y")+'.csv'
-            with open(path+newf,'w+') as nf:
-                nf.write("Sitting-Standing time\n")
-                nf.write(str(content)+"\n")
-            with open(path+newf, 'rb') as myfile:
-                part = MIMEApplication(myfile.read(), Name=f)
-                part['Content-Disposition'] = 'attachment; filename="%s"' % f
-                msg.attach(part)
-
-    '''
-    files = []
-    found_file = False
-
-    body += "Gym info:\n"
-
-    path = rospack.get_path('radio_node_manager')+'/logs/'
-    for i in os.listdir(path):
-        if os.path.isfile(os.path.join(path,i)) and 'official_log_'+datetime.today().strftime("%d-%m-%Y") in i:
-            found_file = True
-            files.append(i)
-            files_to_remove.append(path+i)
-
-    if found_file:
+        counter = 0
+        repetition = 'a'
+        annotations1 = ['4', '38', '57']
+        annotations2 = ['V2', 'V15', 'V25']
+        if found_file:
+            files.sort()
             for f in files:
-                with open(path+f, 'r') as myfile:
-                        body += myfile.read()
+                content = np.genfromtxt(path+f, delimiter=',')
+                content = content[1]
+                report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+','+str(content)+'\n')
+                counter += 1
+                if counter == len(annotations):
+                    counter = 0
+                    repetition = 'b'
 
-    body += "---\n\n\n"
-    '''
+        files = []
+        found_file = False
 
+        for i in os.listdir(path):
+            for d in range(2, -1, -1):
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_pill_'+(datetime.date.today()-datetime.timedelta(d)).strftime("%d-%m-%Y") in i:
+                    found_file = True
+                    files.append(i)
+                    files_to_move.append(path+i)
+
+        counter = 0
+        repetition = 'a'
+        annotations1 = ['10', '22', '44', '63']
+        annotations2 = ['V5', 'V7', 'V18', 'V28']
+        if found_file:
+            for f in files:
+                content = np.genfromtxt(path+f, delimiter=',')
+                content = content[1]
+                report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+','+str(content)+'\n')
+                counter += 1
+                if counter == len(annotations):
+                    counter = 0
+                    repetition = 'b'
+        files = []
+        found_file = False
+
+        path = rospack.get_path('hpr_wrapper')+'/logs/'
+        for i in os.listdir(path):
+            for d in range(2, -1, -1):
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_walk_'+(datetime.date.today()-datetime.timedelta(d)).strftime("%d-%m-%Y") in i:
+                    found_file = True
+                    files.append(i)
+                    files_to_move.append(path+i)
+
+        counter = 0
+        repetition = 'a'
+        annotations1 = ['6', '24', '30', '50', '69', '75']
+        annotations2 = ['V12', 'V8', 'V11', 'V21', 'V31', 'V34']
+        if found_file:
+            for f in files:
+                content = []
+                filtered = []
+                title = []
+                content = np.genfromtxt(path+f, delimiter=',')
+                content = content[1:-1]
+                filtered = [x for x in content if x[2] > 2]
+                filtered.sort(key=lambda x: x[2])
+                filtered = filtered[len(filtered)/2]
+                report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+',')
+                report_file.write(str(filtered[1])+',')
+                report_file.write(str(filtered[2])+'\n')
+                counter += 1
+                if counter == len(annotations):
+                    counter = 0
+                    repetition = 'b'
+
+        files = []
+        found_file = False
+
+        path = rospack.get_path('ros_visual_wrapper')+'/logs/'
+        for i in os.listdir(path):
+            for d in range(2, -1, -1):
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_chair_'+(datetime.date.today()-datetime.timedelta(d)).strftime("%d-%m-%Y") in i:
+                    found_file = True
+                    files.append(i)
+                    files_to_move.append(path+i)
+
+        counter = 0
+        repetition = 'a'
+        annotations1 = ['8', '28', '34', '48', '61']
+        annotations2 = ['V4', 'V10', 'V13', 'V20', 'V27']
+        if found_file:
+            for f in files:
+                content = np.genfromtxt(path+f, delimiter=',')
+                content = content[1:-1]
+                content.sort()
+                content = content[len(content)/2]
+                nf.write(str(content)+"\n")
+                counter += 1
+                if counter == len(annotations):
+                    counter = 0
+                    repetition = 'b'
+
+    with open(radio_logs+'/report'+rmax+'.csv', 'rb') as myfile:
+        part = MIMEApplication(myfile.read(), Name=f)
+        part['Content-Disposition'] = 'attachment; filename="%s"' % f
+        msg.attach(part)
     msg.attach(MIMEText(body, 'plain'))
 
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -157,9 +161,9 @@ def generateReport(msg):
     text = msg.as_string()
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
-    #for f in files_to_remove:
-    #    os.remove(f)
-    #    print 'Deleted',f
+    for f in files_to_move:
+        os.rename(f,radio_logs+'/'+f.rpartition('/')[-1])
+        print 'Moved',f
     sound_msg = Sound()
     sound_msg.value = 0
     sound_pub.publish(sound_msg)
