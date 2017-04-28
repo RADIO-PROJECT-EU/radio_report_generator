@@ -60,8 +60,11 @@ def generateReport(msg):
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',')
-                content = content[1]
-                report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
+                if len(content) > 1:
+                    content = content[1]
+                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
+                else:
+                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+', , \n')
                 counter += 1
                 if counter == len(annotations1):
                     counter = 0
@@ -85,8 +88,11 @@ def generateReport(msg):
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',',dtype=None)
-                content = content[1]
-                report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
+                if len(content) > 1:
+                    content = content[1]
+                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
+                else:
+                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+', , \n')
                 counter += 1
                 if counter == len(annotations1):
                     counter = 0
@@ -113,12 +119,15 @@ def generateReport(msg):
                 filtered = []
                 title = []
                 content = np.genfromtxt(path+f, delimiter=',')
-                content = content[1:-1]
-                filtered = [x for x in content if x[2] > 2]
-                filtered.sort(key=lambda x: x[2])
-                filtered = filtered[len(filtered)/2]
-                report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+',')
-                report_file.write(str(filtered[2])+'\n')
+                if len(content) > 1:
+                    content = content[1:-1]
+                    filtered = [x for x in content if x[2] > 2]
+                    filtered.sort(key=lambda x: x[2])
+                    filtered = filtered[len(filtered)/2]
+                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+',')
+                    report_file.write(str(filtered[2])+'\n')
+                else:
+                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+', \n')
                 counter += 1
                 if counter == len(annotations1):
                     counter = 0
@@ -143,11 +152,14 @@ def generateReport(msg):
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',')
-                content = content[1:-1]
-                content.sort()
-                content = content[len(content)/2]
-                report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+',')
-                report_file.write(str(content)+"\n")
+                if len(content) > 1:
+                    content = content[1:-1]
+                    content.sort()
+                    content = content[len(content)/2]
+                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+',')
+                    report_file.write(str(content)+"\n")
+                else:
+                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+', \n')
                 counter += 1
                 if counter == len(annotations1):
                     counter = 0
