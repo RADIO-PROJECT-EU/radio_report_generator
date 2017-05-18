@@ -178,7 +178,7 @@ def generateReport(msg):
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
     for f in files_to_move:
-        #os.rename(os.path.expanduser(f),os.path.expanduser(radio_logs)+'/'+f.rpartition('/')[-1])
+        os.rename(os.path.expanduser(f),os.path.expanduser(radio_logs)+'/'+f.rpartition('/')[-1])
         print 'Moved',f
     sound_msg = Sound()
     sound_msg.value = 0
