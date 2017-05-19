@@ -143,7 +143,6 @@ def generateReport(msg):
 
         counter = 0
         repetition = 'a'
-        annotations = ['8', '28', '34', '48', '61']
         annotations = ['V8', 'V228', 'V28', 'V34', 'V48', 'V61']
         if found_file:
             files.sort()
@@ -157,6 +156,137 @@ def generateReport(msg):
                     report_file.write(str(content)+"\n")
                 else:
                     report_file.write(annotations[counter]+','+repetition+', \n')
+                counter += 1
+                if counter == len(annotations):
+                    counter = 0
+                    repetition = 'b'
+        annotations = ['V39', 'V42', 'V51', 'V66', 'V70', 'V71']
+
+        files = []
+        found_file = False
+
+        path = rospack.get_path('snc_events_wrapper')+'/logs/'
+        for i in os.listdir(path):
+            for d in range(2, -1, -1):
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_tv_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
+                    found_file = True
+                    files.append(i)
+                    files_to_move.append(path+i)
+
+        counter = 0
+        repetition = 'a'
+        annotations = ['V39']
+        if found_file:
+            files.sort()
+            for f in files:
+                content = np.genfromtxt(path+f, delimiter=',')
+                content = content[1]
+                report_file.write(annotations[counter]+','+repetition+',')
+                report_file.write(str(content)+"\n")
+                counter += 1
+                if counter == len(annotations):
+                    counter = 0
+                    repetition = 'b'
+
+        files = []
+        found_file = False
+
+        path = rospack.get_path('snc_events_wrapper')+'/logs/'
+        for i in os.listdir(path):
+            for d in range(2, -1, -1):
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_presence_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
+                    found_file = True
+                    files.append(i)
+                    files_to_move.append(path+i)
+
+        counter = 0
+        repetition = 'a'
+        annotations = ['V42']
+        if found_file:
+            files.sort()
+            for f in files:
+                content = np.genfromtxt(path+f, delimiter=',')
+                content = content[1]
+                report_file.write(annotations[counter]+','+repetition+',')
+                report_file.write(str(content)+"\n")
+                counter += 1
+                if counter == len(annotations):
+                    counter = 0
+                    repetition = 'b'
+
+        files = []
+        found_file = False
+
+        path = rospack.get_path('snc_events_wrapper')+'/logs/'
+        for i in os.listdir(path):
+            for d in range(2, -1, -1):
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_cooking_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
+                    found_file = True
+                    files.append(i)
+                    files_to_move.append(path+i)
+
+        counter = 0
+        repetition = 'a'
+        annotations = ['V51', 'V66']
+        if found_file:
+            files.sort()
+            for f in files:
+                content = np.genfromtxt(path+f, delimiter=',')
+                content = content[1]
+                report_file.write(annotations[counter]+','+repetition+',')
+                report_file.write(str(content)+"\n")
+                counter += 1
+                if counter == len(annotations):
+                    counter = 0
+                    repetition = 'b'
+
+        files = []
+        found_file = False
+
+        path = rospack.get_path('snc_events_wrapper')+'/logs/'
+        for i in os.listdir(path):
+            for d in range(2, -1, -1):
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_coming_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
+                    found_file = True
+                    files.append(i)
+                    files_to_move.append(path+i)
+
+        counter = 0
+        repetition = 'a'
+        annotations = ['V70']
+        if found_file:
+            files.sort()
+            for f in files:
+                content = np.genfromtxt(path+f, delimiter=',')
+                content = content[1]
+                report_file.write(annotations[counter]+','+repetition+',')
+                report_file.write(str(content)+"\n")
+                counter += 1
+                if counter == len(annotations):
+                    counter = 0
+                    repetition = 'b'
+
+        files = []
+        found_file = False
+
+        path = rospack.get_path('snc_events_wrapper')+'/logs/'
+        for i in os.listdir(path):
+            for d in range(2, -1, -1):
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_going_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
+                    found_file = True
+                    files.append(i)
+                    files_to_move.append(path+i)
+
+        counter = 0
+        repetition = 'a'
+        annotations = ['V71']
+        if found_file:
+            files.sort()
+            for f in files:
+                content = np.genfromtxt(path+f, delimiter=',')
+                content = content[1]
+                report_file.write(annotations[counter]+','+repetition+',')
+                report_file.write(str(content)+"\n")
                 counter += 1
                 if counter == len(annotations):
                     counter = 0
