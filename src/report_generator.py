@@ -18,7 +18,7 @@ def generateReport(msg):
     global sound_pub
     files_to_move = []
     fromaddr = "roboskelncsr@gmail.com"
-    toaddr = ["gstavrinos@iit.demokritos.gr", "gs.juggle@gmail.com"]
+    toaddr = ["mratera@fhag.es", "sarino@fhag.es"]
     subject = "Medical Report as of "+datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     msg = MIMEMultipart()
     msg['From'] = fromaddr
@@ -54,19 +54,18 @@ def generateReport(msg):
 
         counter = 0
         repetition = 'a'
-        annotations1 = ['4', '38', '57']
-        annotations2 = ['V2', 'V15', 'V25']
+        annotations = ['V4', 'V224', 'V38', 'V57']
         if found_file:
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',')
                 if len(content) > 1:
                     content = content[1]
-                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
+                    report_file.write(annotations[counter]+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
                 else:
-                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+', , \n')
+                    report_file.write(annotations[counter]+','+repetition+', , \n')
                 counter += 1
-                if counter == len(annotations1):
+                if counter == len(annotations):
                     counter = 0
                     repetition = 'b'
 
@@ -82,19 +81,18 @@ def generateReport(msg):
 
         counter = 0
         repetition = 'a'
-        annotations1 = ['10', '22', '44', '63']
-        annotations2 = ['V5', 'V7', 'V18', 'V28']
+        annotations = ['V10', 'V210', 'V22', 'V44', 'V63']
         if found_file:
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',',dtype=None)
                 if len(content) > 1:
                     content = content[1]
-                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
+                    report_file.write(annotations[counter]+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
                 else:
-                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+', , \n')
+                    report_file.write(annotations[counter]+','+repetition+', , \n')
                 counter += 1
-                if counter == len(annotations1):
+                if counter == len(annotations):
                     counter = 0
                     repetition = 'b'
         files = []
@@ -110,8 +108,7 @@ def generateReport(msg):
 
         counter = 0
         repetition = 'a'
-        annotations1 = ['12', '24', '30', '50', '65', '69', '75']
-        annotations2 = ['V6', 'V8', 'V11', 'V21', 'V29', 'V31', 'V34']
+        annotations = ['V12', 'V212', 'V24', 'V30', 'V50', 'V65', 'V69', 'V75']
         if found_file:
             files.sort()
             for f in files:
@@ -124,12 +121,12 @@ def generateReport(msg):
                     filtered = [x for x in content if x[2] > 2]
                     filtered.sort(key=lambda x: x[2])
                     filtered = filtered[len(filtered)/2]
-                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+',')
+                    report_file.write(annotations[counter]+','+repetition+',')
                     report_file.write(str(filtered[2])+'\n')
                 else:
-                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+', \n')
+                    report_file.write(annotations[counter]+','+repetition+', \n')
                 counter += 1
-                if counter == len(annotations1):
+                if counter == len(annotations):
                     counter = 0
                     repetition = 'b'
 
@@ -146,8 +143,8 @@ def generateReport(msg):
 
         counter = 0
         repetition = 'a'
-        annotations1 = ['8', '28', '34', '48', '61']
-        annotations2 = ['V4', 'V10', 'V13', 'V20', 'V27']
+        annotations = ['8', '28', '34', '48', '61']
+        annotations = ['V8', 'V228', 'V28', 'V34', 'V48', 'V61']
         if found_file:
             files.sort()
             for f in files:
@@ -156,12 +153,12 @@ def generateReport(msg):
                     content = content[1:-1]
                     content.sort()
                     content = content[len(content)/2]
-                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+',')
+                    report_file.write(annotations[counter]+','+repetition+',')
                     report_file.write(str(content)+"\n")
                 else:
-                    report_file.write(annotations1[counter]+','+annotations2[counter]+','+repetition+', \n')
+                    report_file.write(annotations[counter]+','+repetition+', \n')
                 counter += 1
-                if counter == len(annotations1):
+                if counter == len(annotations):
                     counter = 0
                     repetition = 'b'
 
