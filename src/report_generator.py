@@ -160,7 +160,6 @@ def generateReport(msg):
                 if counter == len(annotations):
                     counter = 0
                     repetition = 'b'
-        annotations = ['V39', 'V42', 'V51', 'V66', 'V70', 'V71']
 
         files = []
         found_file = False
