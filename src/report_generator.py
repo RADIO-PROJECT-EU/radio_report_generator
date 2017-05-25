@@ -178,7 +178,7 @@ def generateReport(msg):
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',')
+                content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
                 report_file.write(annotations[counter]+','+repetition+',')
                 report_file.write(str(content)+"\n")
@@ -204,7 +204,7 @@ def generateReport(msg):
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',')
+                content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
                 report_file.write(annotations[counter]+','+repetition+',')
                 report_file.write(str(content)+"\n")
@@ -230,7 +230,7 @@ def generateReport(msg):
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',')
+                content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
                 report_file.write(annotations[counter]+','+repetition+',')
                 report_file.write(str(content)+"\n")
@@ -256,7 +256,7 @@ def generateReport(msg):
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',')
+                content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
                 report_file.write(annotations[counter]+','+repetition+',')
                 report_file.write(str(content)+"\n")
@@ -282,7 +282,7 @@ def generateReport(msg):
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',')
+                content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
                 report_file.write(annotations[counter]+','+repetition+',')
                 report_file.write(str(content)+"\n")
@@ -292,7 +292,7 @@ def generateReport(msg):
                     repetition = 'b'
 
     with open(os.path.expanduser(radio_logs)+'/report'+str(rmax)+'.csv', 'rb') as myfile:
-        part = MIMEApplication(myfile.read(), Name=f)
+        part = MIMEApplication(myfile.read(), Name='report'+str(rmax)+'.csv')
         part['Content-Disposition'] = 'attachment; filename=%s' % 'report'+str(rmax)+'.csv'
         msg.attach(part)
     msg.attach(MIMEText(body, 'plain'))
