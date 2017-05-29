@@ -226,7 +226,7 @@ def generateReport(msg):
 
         counter = 0
         repetition = 'a'
-        annotations = ['V51', 'V66']
+        annotations = ['V52', 'V67']
         if found_file:
             files.sort()
             for f in files:
