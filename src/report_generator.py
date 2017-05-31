@@ -6,16 +6,13 @@ import smtplib
 import numpy as np
 from datetime import datetime
 from datetime import timedelta
-from std_msgs.msg import Int32
-from kobuki_msgs.msg import Sound
 from email.mime.text import MIMEText
 from email.MIMEMultipart import MIMEMultipart
 from email.mime.application import MIMEApplication
+from radio_services.srv import InstructionWithAnswer
 
-sound_pub = None
 
 def generateReport(msg):
-    global sound_pub
     files_to_move = []
     fromaddr = "roboskelncsr@gmail.com"
     toaddr = ["mratera@fhag.es", "sarino@fhag.es"]
@@ -306,16 +303,11 @@ def generateReport(msg):
     for f in files_to_move:
         os.rename(os.path.expanduser(f),os.path.expanduser(radio_logs)+'/'+f.rpartition('/')[-1])
         print 'Moved',f
-    sound_msg = Sound()
-    sound_msg.value = 0
-    sound_pub.publish(sound_msg)
+    return True
 
 def init():
-    global sound_pub
     rospy.init_node('radio_report_generator')
-    sound_pub = rospy.Publisher('mobile_base/commands/sound', Sound, queue_size=1)
-    rospy.Subscriber("radio_generate_report", Int32, generateReport)
-
+    rospy.Service('radio_report_generation', InstructionWithAnswer, generateReport)
     while not rospy.is_shutdown():
         rospy.spin()
 
