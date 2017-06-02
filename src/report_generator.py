@@ -114,8 +114,10 @@ def generateReport(msg):
                 title = []
                 content = np.genfromtxt(path+f, delimiter=',')
                 if len(content) > 1:
-                    content = content[1:-1]
+                    content = content[1:]
                     filtered = [x for x in content if x[2] > 2]
+                    if len(filtered) < 1:
+                        filtered = [x for x in content]
                     filtered.sort(key=lambda x: x[2])
                     filtered = filtered[len(filtered)/2]
                     report_file.write(annotations[counter]+','+repetition+',')
@@ -146,7 +148,7 @@ def generateReport(msg):
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',')
                 if len(content) > 1:
-                    content = content[1:-1]
+                    content = content[1:]
                     content.sort()
                     content = content[len(content)/2]
                     report_file.write(annotations[counter]+','+repetition+',')
