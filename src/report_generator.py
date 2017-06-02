@@ -56,9 +56,9 @@ def generateReport(msg):
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',')
-                if len(content) > 1:
-                    content = content[1]
-                    report_file.write(annotations[counter]+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
+                if len(content) > 0:
+                    #content = content[1]
+                    report_file.write(annotations[counter]+','+repetition+','+str(content[0])+'\n')
                 else:
                     report_file.write(annotations[counter]+','+repetition+', , \n')
                 counter += 1
