@@ -15,7 +15,7 @@ from radio_services.srv import InstructionWithAnswer
 def generateReport(msg):
     files_to_move = []
     fromaddr = "roboskelncsr@gmail.com"
-    toaddr = ["mratera@fhag.es", "sarino@fhag.es"]
+    toaddr = ["gstavrinos@iit.demokritos.gr"]#, "sarino@fhag.es"]
     subject = "Medical Report as of "+datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     msg = MIMEMultipart()
     msg['From'] = fromaddr
@@ -44,90 +44,77 @@ def generateReport(msg):
         found_file = False
         for i in os.listdir(path):
             for d in range(2, -1, -1):
-                if os.path.isfile(os.path.join(path,i)) and 'official_log_bed_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_bed_' in i and str((datetime.today()-timedelta(d)).strftime("%d-%m-%Y")) in i:
                     found_file = True
                     files.append(i)
                     files_to_move.append(path+i)
 
-        counter = 0
-        repetition = 'a'
-        annotations = ['V4', 'V224', 'V38', 'V57']
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',')
+                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1)
+                sp = f.rsplit("_")
+                annotation = sp[3]
+                repetition = sp[4]
                 if len(content) > 0:
-                    #content = content[1]
-                    report_file.write(annotations[counter]+','+repetition+','+str(content[0])+'\n')
+                    report_file.write(annotation+','+repetition+','+str(content[0])+'\n')
                 else:
-                    report_file.write(annotations[counter]+','+repetition+', , \n')
-                counter += 1
-                if counter == len(annotations):
-                    counter = 0
-                    repetition = 'b'
+                    report_file.write(annotation+','+repetition+',NO DETECTION\n')
 
         files = []
         found_file = False
 
         for i in os.listdir(path):
             for d in range(2, -1, -1):
-                if os.path.isfile(os.path.join(path,i)) and 'official_log_pill_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_pill_' in i and str((datetime.today()-timedelta(d)).strftime("%d-%m-%Y")) in i:
                     found_file = True
                     files.append(i)
                     files_to_move.append(path+i)
 
-        counter = 0
-        repetition = 'a'
-        annotations = ['V10', 'V210', 'V22', 'V44', 'V63']
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',',dtype=None)
-                if len(content) > 1:
-                    content = content[1]
-                    report_file.write(annotations[counter]+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
+                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1)
+                sp = f.rsplit("_")
+                annotation = sp[3]
+                repetition = sp[4]
+                if len(content) > 0:
+                    report_file.write(annotation+','+repetition+','+str(content[0])+','+str(content[1])+'\n')
                 else:
-                    report_file.write(annotations[counter]+','+repetition+', , \n')
-                counter += 1
-                if counter == len(annotations):
-                    counter = 0
-                    repetition = 'b'
+                    report_file.write(annotation+','+repetition+',NO DETECTION,NO DETECTION\n')
         files = []
         found_file = False
 
         path = rospack.get_path('hpr_wrapper')+'/logs/'
         for i in os.listdir(path):
             for d in range(2, -1, -1):
-                if os.path.isfile(os.path.join(path,i)) and 'official_log_walk_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_walk_' in i and str((datetime.today()-timedelta(d)).strftime("%d-%m-%Y")) in i:
                     found_file = True
                     files.append(i)
                     files_to_move.append(path+i)
 
-        counter = 0
-        repetition = 'a'
-        annotations = ['V12', 'V212', 'V24', 'V30', 'V50', 'V65', 'V69', 'V75']
         if found_file:
             files.sort()
             for f in files:
                 content = []
                 filtered = []
                 title = []
-                content = np.genfromtxt(path+f, delimiter=',')
-                if len(content) > 1:
-                    content = content[1:]
-                    filtered = [x for x in content if x[2] > 2]
-                    if len(filtered) < 1:
+                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1)
+                sp = f.rsplit("_")
+                annotation = sp[3]
+                repetition = sp[4]
+                if len(content) > 0:
+                    filtered = None
+                    if isinstance(content[0], type(content)):
+                        filtered = [x for x in content if x[2] > 2]
+                        filtered.sort(key=lambda x: x[2])
+                        filtered = filtered[len(filtered)/2]
+                    else:
                         filtered = [x for x in content]
-                    filtered.sort(key=lambda x: x[2])
-                    filtered = filtered[len(filtered)/2]
-                    report_file.write(annotations[counter]+','+repetition+',')
+                    report_file.write(annotation+','+repetition+',')
                     report_file.write(str(filtered[2])+'\n')
                 else:
-                    report_file.write(annotations[counter]+','+repetition+', \n')
-                counter += 1
-                if counter == len(annotations):
-                    counter = 0
-                    repetition = 'b'
+                    report_file.write(annotation+','+repetition+',NO DETECTION\n')
 
         files = []
         found_file = False
@@ -135,30 +122,30 @@ def generateReport(msg):
         path = rospack.get_path('ros_visual_wrapper')+'/logs/'
         for i in os.listdir(path):
             for d in range(2, -1, -1):
-                if os.path.isfile(os.path.join(path,i)) and 'official_log_chair_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
+                if os.path.isfile(os.path.join(path,i)) and 'official_log_chair_' in i and str((datetime.today()-timedelta(d)).strftime("%d-%m-%Y")) in i:
                     found_file = True
                     files.append(i)
                     files_to_move.append(path+i)
 
-        counter = 0
-        repetition = 'a'
-        annotations = ['V8', 'V228', 'V28', 'V34', 'V48', 'V61']
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',')
-                if len(content) > 1:
-                    content = content[1:]
-                    content.sort()
-                    content = content[len(content)/2]
-                    report_file.write(annotations[counter]+','+repetition+',')
-                    report_file.write(str(content)+"\n")
+                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1)
+                sp = f.rsplit("_")
+                annotation = sp[3]
+                repetition = sp[4]
+                if len(content) > 0:
+                    final_value = 0
+                    for c in content:
+                        if "sit" in c[1]:
+                            final_value += float(c[0])
+                        else:
+                            final_value = c[0]
+                            break
+                    report_file.write(annotation+','+repetition+',')
+                    report_file.write(str(final_value)+"\n")
                 else:
-                    report_file.write(annotations[counter]+','+repetition+', \n')
-                counter += 1
-                if counter == len(annotations):
-                    counter = 0
-                    repetition = 'b'
+                    report_file.write(annotation+','+repetition+',NO DETECTION\n')
 
         files = []
         found_file = False
@@ -179,7 +166,7 @@ def generateReport(msg):
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
-                report_file.write(annotations[counter]+','+repetition+',')
+                report_file.write(annotation+','+repetition+',')
                 report_file.write(str(content)+"\n")
                 counter += 1
                 if counter == len(annotations):
@@ -205,7 +192,7 @@ def generateReport(msg):
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
-                report_file.write(annotations[counter]+','+repetition+',')
+                report_file.write(annotation+','+repetition+',')
                 report_file.write(str(content)+"\n")
                 counter += 1
                 if counter == len(annotations):
@@ -231,7 +218,7 @@ def generateReport(msg):
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
-                report_file.write(annotations[counter]+','+repetition+',')
+                report_file.write(annotation+','+repetition+',')
                 report_file.write(str(content)+"\n")
                 counter += 1
                 if counter == len(annotations):
@@ -257,7 +244,7 @@ def generateReport(msg):
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
-                report_file.write(annotations[counter]+','+repetition+',')
+                report_file.write(annotation+','+repetition+',')
                 report_file.write(str(content)+"\n")
                 counter += 1
                 if counter == len(annotations):
@@ -283,7 +270,7 @@ def generateReport(msg):
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
-                report_file.write(annotations[counter]+','+repetition+',')
+                report_file.write(annotation+','+repetition+',')
                 report_file.write(str(content)+"\n")
                 counter += 1
                 if counter == len(annotations):
