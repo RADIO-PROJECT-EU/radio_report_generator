@@ -15,7 +15,7 @@ from radio_services.srv import InstructionWithAnswer
 def generateReport(msg):
     files_to_move = []
     fromaddr = "roboskelncsr@gmail.com"
-    toaddr = ["gstavrinos@iit.demokritos.gr"]#, "sarino@fhag.es"]
+    toaddr = ["mratera@fhag.es", "gstavrinos@iit.demokritos.gr", "sarino@fhag.es"]
     subject = "Medical Report as of "+datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     msg = MIMEMultipart()
     msg['From'] = fromaddr
@@ -135,13 +135,16 @@ def generateReport(msg):
                 annotation = sp[3]
                 repetition = sp[4]
                 if len(content) > 0:
-                    final_value = 0
-                    for c in content:
-                        if "sit" in c[1]:
-                            final_value += float(c[0])
-                        else:
-                            final_value = c[0]
-                            break
+                    final_value = 0.0
+                    if isinstance(content[0], type(content)):
+                        for c in content:
+                            if "sit" in c[1]:
+                                final_value += float(c[0])
+                            else:
+                                final_value = float(c[0])
+                                break
+                    else:
+                        final_value = float(content[0])
                     report_file.write(annotation+','+repetition+',')
                     report_file.write(str(final_value)+"\n")
                 else:
