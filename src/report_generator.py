@@ -56,10 +56,13 @@ def generateReport(msg):
                 sp = f.rsplit("_")
                 annotation = sp[3]
                 repetition = sp[4]
-                if len(content) > 0:
-                    report_file.write(annotation+','+repetition+','+str(content[0])+'\n')
+                if (isinstance(content, list)): 
+                    if len(content) > 0:
+                        report_file.write(annotation+','+repetition+','+str(content[0])+'\n')
+                    else:
+                        report_file.write(annotation+','+repetition+',NO DETECTION\n')
                 else:
-                    report_file.write(annotation+','+repetition+',NO DETECTION\n')
+                    report_file.write(annotation+','+repetition+','+str(content)+'\n')
 
         files = []
         found_file = False
