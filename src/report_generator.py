@@ -56,8 +56,9 @@ def generateReport(msg):
                 sp = f.rsplit("_")
                 annotation = sp[3]
                 repetition = sp[4]
-                if (isinstance(content, list)): 
-                    if len(content) > 0:
+                if (isinstance(content, np.ndarray)): 
+                    content = np.atleast_1d(content)
+                    if content.size > 0:
                         report_file.write(annotation+','+repetition+','+str(content[0])+'\n')
                     else:
                         report_file.write(annotation+','+repetition+',NO DETECTION\n')
