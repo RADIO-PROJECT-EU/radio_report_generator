@@ -15,7 +15,7 @@ from radio_services.srv import InstructionWithAnswer
 def generateReport(msg):
     files_to_move = []
     fromaddr = "roboskelncsr@gmail.com"
-    toaddr = ["mratera@fhag.es", "gstavrinos@iit.demokritos.gr", "sarino@fhag.es"]
+    toaddr = ["info@frontidazois.gr", "gstavrinos@iit.demokritos.gr", "ch.antonop@gmail.com", "emariatos@gmail.com"]
     subject = "Medical Report as of "+datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     msg = MIMEMultipart()
     msg['From'] = fromaddr
@@ -43,7 +43,7 @@ def generateReport(msg):
         files = []
         found_file = False
         for i in os.listdir(path):
-            for d in range(2, -1, -1):
+            for d in range(6, -1, -1):
                 if os.path.isfile(os.path.join(path,i)) and 'official_log_bed_' in i and str((datetime.today()-timedelta(d)).strftime("%d-%m-%Y")) in i:
                     found_file = True
                     files.append(i)
@@ -69,7 +69,7 @@ def generateReport(msg):
         found_file = False
 
         for i in os.listdir(path):
-            for d in range(2, -1, -1):
+            for d in range(6, -1, -1):
                 if os.path.isfile(os.path.join(path,i)) and 'official_log_pill_' in i and str((datetime.today()-timedelta(d)).strftime("%d-%m-%Y")) in i:
                     found_file = True
                     files.append(i)
@@ -91,7 +91,7 @@ def generateReport(msg):
 
         path = rospack.get_path('hpr_wrapper')+'/logs/'
         for i in os.listdir(path):
-            for d in range(2, -1, -1):
+            for d in range(6, -1, -1):
                 if os.path.isfile(os.path.join(path,i)) and 'official_log_walk_' in i and str((datetime.today()-timedelta(d)).strftime("%d-%m-%Y")) in i:
                     found_file = True
                     files.append(i)
@@ -125,7 +125,7 @@ def generateReport(msg):
 
         path = rospack.get_path('ros_visual_wrapper')+'/logs/'
         for i in os.listdir(path):
-            for d in range(2, -1, -1):
+            for d in range(6, -1, -1):
                 if os.path.isfile(os.path.join(path,i)) and 'official_log_chair_' in i and str((datetime.today()-timedelta(d)).strftime("%d-%m-%Y")) in i:
                     found_file = True
                     files.append(i)
@@ -159,7 +159,7 @@ def generateReport(msg):
 
         path = rospack.get_path('snc_events_wrapper')+'/logs/'
         for i in os.listdir(path):
-            for d in range(2, -1, -1):
+            for d in range(6, -1, -1):
                 if os.path.isfile(os.path.join(path,i)) and 'official_log_tv_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
                     found_file = True
                     files.append(i)
@@ -185,7 +185,7 @@ def generateReport(msg):
 
         path = rospack.get_path('snc_events_wrapper')+'/logs/'
         for i in os.listdir(path):
-            for d in range(2, -1, -1):
+            for d in range(6, -1, -1):
                 if os.path.isfile(os.path.join(path,i)) and 'official_log_presence_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
                     found_file = True
                     files.append(i)
@@ -211,7 +211,7 @@ def generateReport(msg):
 
         path = rospack.get_path('snc_events_wrapper')+'/logs/'
         for i in os.listdir(path):
-            for d in range(2, -1, -1):
+            for d in range(6, -1, -1):
                 if os.path.isfile(os.path.join(path,i)) and 'official_log_cooking_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
                     found_file = True
                     files.append(i)
@@ -237,7 +237,7 @@ def generateReport(msg):
 
         path = rospack.get_path('snc_events_wrapper')+'/logs/'
         for i in os.listdir(path):
-            for d in range(2, -1, -1):
+            for d in range(6, -1, -1):
                 if os.path.isfile(os.path.join(path,i)) and 'official_log_coming_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
                     found_file = True
                     files.append(i)
@@ -263,7 +263,7 @@ def generateReport(msg):
 
         path = rospack.get_path('snc_events_wrapper')+'/logs/'
         for i in os.listdir(path):
-            for d in range(2, -1, -1):
+            for d in range(6, -1, -1):
                 if os.path.isfile(os.path.join(path,i)) and 'official_log_going_'+(datetime.today()-timedelta(d)).strftime("%d-%m-%Y") in i:
                     found_file = True
                     files.append(i)
