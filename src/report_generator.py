@@ -52,7 +52,7 @@ def generateReport(msg):
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1)
+                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1, invalid_raise=False)
                 sp = f.rsplit("_")
                 annotation = sp[3]
                 repetition = sp[4]
@@ -78,7 +78,7 @@ def generateReport(msg):
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1)
+                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1, invalid_raise=False)
                 sp = f.rsplit("_")
                 annotation = sp[3]
                 repetition = sp[4]
@@ -103,7 +103,7 @@ def generateReport(msg):
                 content = []
                 filtered = []
                 title = []
-                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1)
+                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1, invalid_raise=False)
                 sp = f.rsplit("_")
                 annotation = sp[3]
                 repetition = sp[4]
@@ -134,7 +134,7 @@ def generateReport(msg):
         if found_file:
             files.sort()
             for f in files:
-                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1)
+                content = np.genfromtxt(path+f, delimiter=',', dtype='unicode', skip_header=1, invalid_raise=False)
                 sp = f.rsplit("_")
                 annotation = sp[3]
                 repetition = sp[4]
