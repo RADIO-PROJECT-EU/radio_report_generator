@@ -15,7 +15,7 @@ from radio_services.srv import InstructionWithAnswer
 def generateReport(msg):
     files_to_move = []
     fromaddr = "roboskelncsr@gmail.com"
-    toaddr = ["info@frontidazois.gr", "gstavrinos@iit.demokritos.gr", "ch.antonop@gmail.com", "emariatos@gmail.com"]
+    toaddr = ["info@frontidazois.gr", "gstavrinos@iit.demokritos.gr", "ch.antonop@gmail.com", "emariatos@gmail.com", "mdagiogl@iit.demokritos.gr", "konstant@iit.demokritos.gr"]
     subject = "Medical Report as of "+datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     msg = MIMEMultipart()
     msg['From'] = fromaddr
@@ -168,17 +168,21 @@ def generateReport(msg):
         counter = 0
         repetition = 'a'
         annotations = ['V39']
+        original = []
+
         if found_file:
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
-                report_file.write(annotations[counter]+','+repetition+',')
-                report_file.write(str(content)+"\n")
-                counter += 1
-                if counter == len(annotations):
-                    counter = 0
-                    repetition = 'b'
+                if not content in original:
+                    report_file.write(annotations[counter]+','+repetition+',')
+                    report_file.write(str(content)+"\n")
+                    counter += 1
+                    original.append(content)
+                    if counter == len(annotations):
+                        counter = 0
+                        repetition = 'b'
 
         files = []
         found_file = False
@@ -194,17 +198,21 @@ def generateReport(msg):
         counter = 0
         repetition = 'a'
         annotations = ['V42']
+        original = []
+
         if found_file:
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
-                report_file.write(annotations[counter]+','+repetition+',')
-                report_file.write(str(content)+"\n")
-                counter += 1
-                if counter == len(annotations):
-                    counter = 0
-                    repetition = 'b'
+                if not content in original:
+                    report_file.write(annotations[counter]+','+repetition+',')
+                    report_file.write(str(content)+"\n")
+                    counter += 1
+                    original.append(content)
+                    if counter == len(annotations):
+                        counter = 0
+                        repetition = 'b'
 
         files = []
         found_file = False
@@ -220,17 +228,21 @@ def generateReport(msg):
         counter = 0
         repetition = 'a'
         annotations = ['V52', 'V67']
+        original = []
+
         if found_file:
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
-                report_file.write(annotations[counter]+','+repetition+',')
-                report_file.write(str(content)+"\n")
-                counter += 1
-                if counter == len(annotations):
-                    counter = 0
-                    repetition = 'b'
+                if not content in original:
+                    report_file.write(annotations[counter]+','+repetition+',')
+                    report_file.write(str(content)+"\n")
+                    counter += 1
+                    original.append(content)
+                    if counter == len(annotations):
+                        counter = 0
+                        repetition = 'b'
 
         files = []
         found_file = False
@@ -246,17 +258,20 @@ def generateReport(msg):
         counter = 0
         repetition = 'a'
         annotations = ['V70']
+        original = []
         if found_file:
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
-                report_file.write(annotations[counter]+','+repetition+',')
-                report_file.write(str(content)+"\n")
-                counter += 1
-                if counter == len(annotations):
-                    counter = 0
-                    repetition = 'b'
+                if not content in original:
+                    report_file.write(annotations[counter]+','+repetition+',')
+                    report_file.write(str(content)+"\n")
+                    counter += 1
+                    original.append(content)
+                    if counter == len(annotations):
+                        counter = 0
+                        repetition = 'b'
 
         files = []
         found_file = False
@@ -272,17 +287,21 @@ def generateReport(msg):
         counter = 0
         repetition = 'a'
         annotations = ['V71']
+        original = []
+
         if found_file:
             files.sort()
             for f in files:
                 content = np.genfromtxt(path+f, delimiter=',', dtype=None)
                 content = content[1]
-                report_file.write(annotations[counter]+','+repetition+',')
-                report_file.write(str(content)+"\n")
-                counter += 1
-                if counter == len(annotations):
-                    counter = 0
-                    repetition = 'b'
+                if not content in original:
+                    report_file.write(annotations[counter]+','+repetition+',')
+                    report_file.write(str(content)+"\n")
+                    counter += 1
+                    original.append(content)
+                    if counter == len(annotations):
+                        counter = 0
+                        repetition = 'b'
 
     with open(os.path.expanduser(radio_logs)+'/report'+str(rmax)+'.csv', 'rb') as myfile:
         part = MIMEApplication(myfile.read(), Name='report'+str(rmax)+'.csv')
